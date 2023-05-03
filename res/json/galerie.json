@@ -1,0 +1,53 @@
+{
+    "cale_galerie": "",
+    "imagini": [
+        {
+            "cale_fisier":"afterhills.jpg",
+            "titlu":"AfterHills",
+            "text_descriere":"AfterHills Iasi",
+            "anotimp":"primavara"
+        },
+        {
+            "cale_fisier":"beachplease.jpg",
+            "titlu":"BeachPlease",
+            "text_descriere":"BeachPlease Costinesti",
+            "anotimp":"primavara"
+        },
+        {
+            "cale_fisier":"electriccastle.jpg",
+            "titlu":"Electric Castle",
+            "text_descriere":"Electric Castle Cluj",
+            "anotimp":"primavara"
+        },
+        {
+            "cale_fisier":"neversea.jpg",
+            "titlu":"Neversea",
+            "text_descriere":"Neversea Constanta",
+            "anotimp":"primavara"
+        },
+        {
+            "cale_fisier":"saga.jpeg",
+            "titlu":"SAGA",
+            "text_descriere":"SAGA Bucuresti",
+            "anotimp":"primavara"
+        },
+        {
+            "cale_fisier":"summerwell.jpg",
+            "titlu":"SummerWell",
+            "text_descriere":"SummerWell Bucuresti",
+            "anotimp":"primavara"
+        },
+        {
+            "cale_fisier":"sunwaves.png",
+            "titlu":"SunWaves",
+            "text_descriere":"SunWaves Olimp",
+            "anotimp":"primavara"
+        },
+        {
+            "cale_fisier":"untold.jpg",
+            "titlu":"Untold",
+            "text_descriere":"Untold Cluj",
+            "anotimp":"primavara"
+        }
+    ]
+}

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ro">
+    <head>
+        <%- include('../fragmente/head'); %>
+
+        <title>HaiLaConcert.ro | Bilete concerte</title>
+    </head>
+    <body>
+        <header>
+            <p id="banner">
+                Acesta este un proiect școlar!
+            </p>
+            <%- include('../fragmente/navbar'); %>
+        </header>
+        <main>
+            <div class="grid">
+                <div class="zona-prezentare">
+                    <figure>
+                        <picture>
+                            <source media="(max-width: 640px)" srcset="./res/img/concert_min.jpg">
+                            <source media="(max-width: 1024px)" srcset="./res/img/concert_med.jpg">
+                            <source media="(min-width: 1025px)" srcset="./res/img/concert_max.jpg">
+                            <img src="./res/img/concert_max.jpg" alt="Concert">
+                        </picture>
+                        <figcaption>Pe HaiLaConcert gasesti bilete la concertele artistilor tai favoriti!</figcaption>
+                    </figure>
+                </div>
+                <div class="zona-tabel">
+                    <p><i class="fa-solid fa-ticket" style="margin-right: 3px;"></i>Tipuri bilete</p>
+                    <div class="container-tabel">
+                        <table>
+                            <thead>
+                                <th>Tip</th>
+                                <th>Zona pret</th>
+                                <th>Reduceri studenti</th>
+                                <th>Extra beneficii</th>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Standard</td>
+                                    <td>80 -> 150 RON</td>
+                                    <td>Da</td>
+                                    <td>Nu</td>
+                                </tr>
+                                <tr>
+                                    <td>Standard cu alegerea locului</td>
+                                    <td>150 -> 350 RON</td>
+                                    <td>Da</td>
+                                    <td>Nu</td>
+                                </tr>
+                                <tr>
+                                    <td>V.I.P.</td>
+                                    <td>350 -> 500 RON</td>
+                                    <td>Nu</td>
+                                    <td>Da - detalii pe pagina</td>
+                                </tr>
+                                <tr>
+                                    <td>Backstage experience</td>
+                                    <td>500+ RON</td>
+                                    <td>Nu</td>
+                                    <td>Da - detalii pe pagina</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="4">Preturi valabile pana in Aprilie 2023</td>
+                                </tr>
+                            </tfoot>
+                            <caption><small>Preturile includ TVA.</small></caption>
+                        </table>
+                    </div>
+                </div>
+                <div class="zona-calendar">
+                    <li>17 martie 2023: <b>Concert</b> Florin Salam @ Arenele Romane</li>
+                    <li>1 aprilie 2023: <b>Concert</b> Fuego @ Sala Palatului</li>
+                </div>
+                <div class="zona-anunturi">
+                    <strong>Nu exista anunturi noi!</strong>
+                </div>
+                <div class="zona-utilizatori-conectati">
+                    <p>Utilizatori conectati (3)</p>
+                    <ul>
+                        <li>fsrege</li>
+                        <li>fanparazitii94</li>
+                        <li>ascultdoarbug</li>
+                    </ul>
+                </div>
+                <div class="zona-statistici">
+                    <p>Statistici</p>
+                    <ul>
+                        <li>Utilizatori inregistrati: 305</li>
+                        <li>Concerte disponibile: 2</li>
+                        <li>Orasul cu cele mai multe concerte: Bucuresti</li>
+                        <li>Orasul cu cele mai putine concerte: Barlad</li>
+                    </ul>
+                </div>
+                <div class="zona-informatii-tehnice">
+                    <p>Informatii tehnice</p>
+                    <ul>
+                        <li>IP-ul tau este: <%- ip %></li>
+                    </ul>
+                </div>
+                <section class="grid-orase">
+                    <h2 class="text-header">Recomandari concerte</h2>
+                    <section class="zona-concerte-bucuresti" id="concerte-bucuresti">
+                        <h3>Concerte Bucuresti</h3>
+                        <p>Cauta <b>concerte</b>, <b>concerte populare</b> si <b>concerte recomandate</b> in <b>Bucuresti</b>.</p>
+                        <strong>Exista 2 concerte in curand in Bucuresti!</strong>
+                        <ol>
+                            <li>
+                                <details>
+                                    <summary><b>Concert</b> Florin Salam</summary>
+                                    <p>Arenele Romane, 17 martie 2023, ora 21; bilete incepand de la 160 RON</p>
+                                </details>
+                            </li>
+                            <li>
+                                <details>
+                                    <summary><b>Concert</b> Fuego</summary>
+                                    <p>Sala Palatului, 1 aprilie 2023, ora 19; bilete incepand de la 250 RON</p>
+                                </details>
+                            </li>
+                        </ol>
+                    </section>
+                    <section class="zona-concerte-iasi" id="concerte-iasi">
+                        <h3>Concerte Iasi</h3>
+                        <p>Cauta <b>concerte</b>, <b>concerte populare</b> si <b>concerte recomandate</b> in <b>Iasi</b>.</p>
+                        <strong>Exista 0 concerte in curand in Iasi!</strong>
+                    </section>
+                    <section class="zona-concerte-cluj" id="concerte-cluj-napoca">
+                        <h3>Concerte Cluj-Napoca</h3>
+                        <p>Cauta <b>concerte</b>, <b>concerte populare</b> si <b>concerte recomandate</b> in <b>Cluj-Napoca</b>.</p>
+                        <strong>Exista 0 concerte in curand in Cluj-Napoca!</strong>
+                    </section>
+                    <section class="zona-concerte-timisoara" id="concerte-timisoara">
+                        <h3>Concerte Timisoara</h3>
+                        <p>Cauta <b>concerte</b>, <b>concerte populare</b> si <b>concerte recomandate</b> in <b>Timisoara</b>.</p>
+                        <strong>Exista 0 concerte in curand in Timisoara!</strong>
+                    </section>
+                </section>
+                <section class="grid-informatii-generale">
+                    <h2 class="text-header">Informatii generale</h2>
+                    <section class="zona-sali-concerte" id="sali-concerte">
+                        <h2>Prezentare sali concerte</h2>
+                        <div class="container-iframe">
+                            <iframe class="video-iframe" width="95%" height="315px" name="concert_hall" src="https://www.youtube.com/embed/xamQuuCgCPY" title="Clip prezentare Youtube" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                            <div class="container-butoane">
+                                <a class="buton-iframe" href="https://www.youtube.com/embed/qwYgi5JUVAc" target="concert_hall">Jack Singer</a>
+                                <a class="buton-iframe" href="https://www.youtube.com/embed/pAEd1uDOZJE" target="concert_hall">The Walt Disney Concert Hall</a>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="zona-intrebari-frecvente" id="intrebari-frecvente">
+                        <h2>Intrebari frecvente</h2>
+                        <details>
+                            <summary>Pot renunta la rezervarea de bilet?</summary>
+                            <p>Da, dar nu mai devreme de 2 saptamani inainte de data organizarii evenimentului?</p>
+                        </details>
+                        <details>
+                            <summary>Unde gasesc biletul de acces?</summary>
+                            <p>In Contul meu > Biletele mele > Descarca bilet</p>
+                        </details>
+                        <details>
+                            <summary>Ce se intampla in cazul anularii evenimentului?</summary>
+                            <p>In cazul anularii evenimentului suma achitata va fi returnata automat in contul dvs. bancar in cel mult 2 saptamani de la data anuntului.</p>
+                        </details>
+                    </section>
+                </section>
+                <a href="#" id="link-top" title="Sus">
+                    <div id="triunghi"></div>
+                </a>
+            </div>
+            <%- include('../fragmente/galerie'); %>
+        </main>
+        <footer>
+            <%- include('../fragmente/footer'); %>
+        </footer>
+    </body>
+</html>

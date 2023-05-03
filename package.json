@@ -1,0 +1,17 @@
+{
+  "name": "tehnici_web",
+  "version": "0.0.4",
+  "description": "Proiect la Tehnici Web",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "Micu Victor Tudor",
+  "license": "ISC",
+  "dependencies": {
+    "bootstrap": "^5.2.3",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "sass": "^1.62.1"
+  }
+}

@@ -1,0 +1,20 @@
+<div id="grid-galerie">
+    <%
+    let c = 0;
+    for (let img of gallery) { 
+
+        if(c > 11) break;
+
+        %>
+
+        <figure>
+            <picture>
+                <img src="../../res/img/galerie/<%= img.cale_fisier %>" alt="imagine">
+            </picture>
+            <figcaption><%- img.text_descriere %></figcaption>
+        </figure>
+
+    <% } %>
+   <div id = "gol"></div>
+   <div id = "gol2"></div>
+</div>

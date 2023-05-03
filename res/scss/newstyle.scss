@@ -1,0 +1,593 @@
+/* Schema culori */
+:root {
+    --principal: #2c3e50;
+    --secundar: #f39c12;
+    --alerta: #3498db;
+    --avertizare: #27ae60;
+    --info: #8e44ad;
+}
+
+html {
+    background-color: var(--principal);
+    font-family: 'Montserrat', sans-serif;
+    color: var(--avertizare)
+}
+
+body * {
+    transition: none;
+    animation: none;
+}
+
+h1 {
+    font-size: 2.3rem;
+}
+
+h2 {
+    font-size: 1.7rem;
+}
+
+h3 {
+    font-size: 1.2rem;
+}
+
+p {
+    font-size: 1rem;
+}
+
+strong {
+    font-size: 1rem;
+}
+
+a, a:visited, a:hover, a:active {
+    color: inherit;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: auto;
+    grid-template-areas: "zona-prezentare zona-prezentare zona-prezentare zona-prezentare"
+                         "zona-tabel zona-tabel zona-calendar zona-calendar"
+                         "zona-tabel zona-tabel zona-anunturi zona-anunturi"
+                         "zona-utilizatori-conectati zona-statistici zona-statistici zona-informatii-tehnice"
+                         "grid-orase grid-orase grid-orase grid-orase"
+                         "grid-informatii-generale grid-informatii-generale grid-informatii-generale grid-informatii-generale";
+    gap: 20px 20px;
+    padding: 15px;
+}
+
+.grid-orase {
+    display: grid;
+    grid-area: grid-orase;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: auto;
+    grid-template-areas: "text-header text-header text-header text-header"
+                         "zona-concerte-bucuresti zona-concerte-iasi zona-concerte-cluj zona-concerte-timisoara";
+    gap: 20px 20px;
+}
+
+.grid-informatii-generale {
+    display: grid;
+    grid-area: grid-informatii-generale;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+    grid-template-areas: "text-header text-header"
+                         "zona-sali-concerte zona-intrebari-frecvente";
+    gap: 20px 20px;
+}
+
+@media screen and (max-width: 767px) {
+    .grid {
+        display: grid;
+        grid-template-columns: auto;
+        grid-template-rows: auto;
+        grid-template-areas: "zona-prezentare"
+                             "zona-tabel"
+                             "zona-calendar"
+                             "zona-anunturi"
+                             "zona-utilizatori-conectati"
+                             "zona-statistici"
+                             "zona-informatii-tehnice"
+                             "grid-orase"
+                             "grid-informatii-generale";
+        gap: 20px 20px;
+        padding: 15px;
+    }    
+
+    .grid-orase {
+        display: grid;
+        grid-area: grid-orase;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        grid-template-areas: "text-header"
+                             "zona-concerte-bucuresti"
+                             "zona-concerte-iasi"
+                             "zona-concerte-cluj"
+                             "zona-concerte-timisoara";
+        gap: 20px 20px;
+    }
+    
+    .grid-informatii-generale {
+        display: grid;
+        grid-area: grid-informatii-generale;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        grid-template-areas: "text-header"
+                             "zona-sali-concerte" 
+                             "zona-intrebari-frecvente";
+        gap: 20px 20px;
+    }
+}
+
+.text-header {
+    grid-area: text-header;
+}
+
+.zona-prezentare {
+    grid-area: zona-prezentare;
+    border: 5px solid var(--secundar);
+}
+
+.zona-tabel {
+    grid-area: zona-tabel;
+    border: 5px solid var(--secundar);
+}
+
+.zona-calendar {
+    grid-area: zona-calendar;
+    border: 5px solid var(--secundar);
+}
+
+.zona-anunturi {
+    grid-area: zona-anunturi;
+    border: 5px solid var(--secundar);
+}
+
+.zona-utilizatori-conectati {
+    grid-area: zona-utilizatori-conectati;
+    border: 5px solid var(--secundar);
+}
+
+.zona-statistici {
+    grid-area: zona-statistici;
+    border: 5px solid var(--secundar);
+}
+
+.zona-informatii-tehnice {
+    grid-area: zona-informatii-tehnice;
+    border: 5px solid var(--secundar);
+}
+
+.zona-concerte-bucuresti {
+    grid-area: zona-concerte-bucuresti;
+    border: 5px solid var(--secundar);
+}
+.zona-concerte-iasi {
+    grid-area: zona-concerte-iasi;
+    border: 5px solid var(--secundar);
+}
+
+.zona-concerte-cluj {
+    grid-area: zona-concerte-cluj;
+    border: 5px solid var(--secundar);
+}
+
+.zona-concerte-timisoara {
+    grid-area: zona-concerte-timisoara;
+    border: 5px solid var(--secundar);
+}
+
+.zona-sali-concerte {
+    grid-area: zona-sali-concerte;
+    border: 5px solid var(--secundar);
+}
+
+.zona-intrebari-frecvente {
+    grid-area: zona-intrebari-frecvente;
+    border: 5px solid var(--secundar);
+}
+
+.container-iframe {
+    display: grid;
+    place-self: center;
+    grid-template-columns: 25% 75%;
+    grid-template-rows: auto;
+    grid-template-areas: "butoane-iframe video-iframe"
+                         "butoane-iframe video-iframe";
+    padding: 5px;
+}
+
+.container-butoane {
+    display: flex;
+    grid-area: butoane-iframe;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.buton-iframe {
+    background-color: var(--secundar);
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border: 5px inset var(--secundar);
+    color: var(--principal);
+    height: 50px;
+    width: 84%;
+    padding: 10px;
+    text-decoration: none;
+}
+
+.buton-iframe:hover {
+    background-color: #d35400;
+    transition: background-color 0.5s ease;
+}
+
+.video-iframe {
+    grid-area: video-iframe;
+    border: 5px inset var(--secundar);
+}
+
+caption { 
+    caption-side: bottom; 
+}
+
+.container-tabel {
+    overflow-x: auto;
+    max-width: 100%;
+}
+
+table {
+    --c1: var(--info);
+    --c2: var(--secundar);
+    border: 5px inset var(--secundar);
+    border-collapse: collapse; 
+}
+
+footer {
+    border: 5px solid var(--secundar);
+}
+
+tr:nth-child(even) td {
+    border-bottom: 2px solid var(--c1);
+}
+
+tr:nth-child(odd) td {
+    border-bottom: 2px solid var(--c2);
+}
+
+tr:hover {
+    outline: 5px solid rgba(0, 0, 0, 0.7);
+    transition: outline 0.5s ease;
+}
+
+#link-top {
+    position: fixed;
+    bottom: 0.3em;
+    opacity: 0.5;
+    right: 1.2em;
+    width: 3rem;
+    box-sizing: border-box;
+    height: 3rem;
+    line-height: 3rem;
+    text-align: center;
+    border: 3px solid #989898;
+    border-radius: 50%;
+    background-color: #C8C8C8;
+}
+
+#link-top:hover {
+    opacity: 1;
+    background-color: #989898;
+    transition: all 1s ease;
+    box-shadow: 1px 1px 10px 2px black;
+    border: 3px solid #505050;
+}
+
+#triunghi {
+    height: 0px;
+    width: 0;
+    display: inline-block;
+    border-bottom: 1.5rem solid #555555;
+    border-left: 1rem solid transparent;
+    border-right: 1rem solid transparent;
+    vertical-align: top;
+    transform: translateY(30%);
+}
+
+nav{
+    background-color: var(--secundar);
+    width: calc(100vw - 0.3vw);
+    height: 80px;
+    position: sticky; 
+    // margin-left: calc(-1 * var(35px));
+    padding: 0;
+    transform: translate(-20px, -7px);
+}
+
+ul.meniu, ul.meniu ul{
+    padding: 0;
+    margin:0 ;
+    list-style-type:none;
+}
+ 
+ul.meniu{
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+
+ul.meniu>li{
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: 220px;
+}
+
+ul.meniu li{
+  width: 220px;
+  height: 80px;
+  background-color: var(--secundar);
+  overflow: hidden;
+  text-align: center;
+  border:1px solid var(--info);
+  transition: background-color 0.2s linear;
+  box-sizing: border-box;
+}
+
+ul.meniu ul{
+    opacity: 0;
+    transition: all 0.5s linear;
+    transform: scale(0,0);
+    transform-origin: center top;
+}
+
+ul.meniu li:hover{
+    overflow: visible;
+    background-color:var(--info);
+}
+
+ul.meniu > li:not(:has(ul)){
+    position: relative;
+}
+  
+ul.meniu > li:not(:has(ul))::before {
+    content: "";
+    position: absolute;
+    bottom: 0px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    transform: scaleX(0);
+    transition: transform 0.4s ease-out;
+    transform-origin: right;
+  }
+  
+  ul.meniu > li:not(:has(ul)):hover::before {
+    transform: scaleX(1);
+  }
+ 
+ 
+ul.meniu li:hover ul{
+    opacity: 1;
+    transform: scale(1,1);
+}
+
+ul.meniu li:hover div, ul.meniu a{
+    animation: scale-up-center 1.2s;
+}
+ 
+@keyframes scale-up-center {
+    0% {
+      transform: scale(0.5);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+ 
+ul.meniu li div, ul.meniu li a{
+    display: block;
+    width: 100%;
+    height: 100%;
+    color: var(--avertizare);
+    text-decoration: none;
+    font-weight: bold;
+    line-height: 80px;
+}
+ 
+ul.meniu li div{
+    font-size: 1.5em;
+}
+
+#hamburger, #ch-menu{
+    display: none;
+}
+
+#meniu_mobil {
+    display: none;
+}
+
+@media screen and (max-width: 767px) {
+    #hamburger {
+        display: block;
+        margin: 0;
+        background-color: var(--secundar);
+    }
+
+    #hamburger>img {
+        height: 30px;
+        width: auto;
+        display: block;
+        margin: 0;
+    }
+
+    #meniu_mare {
+        display: none;
+    }
+
+    #meniu_mobil {
+        display: none;
+    }
+
+    ul.meniu li{
+        width: 100%;
+    }
+
+    nav {
+        background-color: var(--secundar);
+        width: calc(100vw + 1.8vw);
+    }
+
+    #ch-menu:checked + #meniu_mobil {
+        display: block !important;
+    }
+    
+    ul.meniu > li:not(:has(ul))::before {
+        background: none;
+    }
+}
+
+#banner {
+    display: none;
+}
+
+@media print {
+    #banner {
+        display: block;
+        width: 80%;
+        margin: 0 auto;
+        border: 2px dotted black;
+        padding: 10px;
+        text-align: center;
+    }
+    
+    img, video, iframe, .container-iframe, [href="#top"], [href="#"], [role="banner"], [role="navigation"] {
+        display: none !important;
+    }
+    
+    .container {
+        display: block;
+    }
+    
+    a {
+        text-decoration: none;
+        color: black;
+    }
+    
+    h1 {
+        font-size: 2.5em;
+        text-align: center;
+        text-decoration: underline;
+    }
+    
+    nav {
+        display: none;
+    }
+    
+    body::after {
+        content: "Micu Victor Tudor";
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        width: 100px;
+        height: 2cm;
+        border: 4px double black;
+        opacity: 0.65;
+        font-size: 1.2em;
+        text-align: center;
+        padding-top: 0.7cm;
+    }
+    
+    @page {
+        margin-left: 2.5cm;
+        margin-right: 0.5cm;
+    }
+
+    @page:right {
+        margin-left: 0.5cm;
+        margin-right: 2.5cm;
+    }
+    
+    h1 {
+        page-break-after: always;
+    }
+    
+    footer {
+        page-break-before: always;
+    }
+}
+
+#grid-galerie {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-areas:
+        ". . . "
+        ". z-gol ."
+        ". . ."
+        ". . ."
+        ". z-gol2 ."
+        ". . .";
+    grid-row-gap: 0.5em;
+    grid-column-gap: 0.5em;
+    counter-reset: nrimag 0; /* nrimag=3 */
+}
+
+#grid-galerie figure {
+    padding: 1em;
+    overflow: hidden;
+}
+
+#grid-galerie img {
+    width: 100%;
+    max-width: 100%;
+    transition: all 0.13s;
+}
+
+#img-container {
+    overflow: hidden;
+    transition: all 0.13s;
+}
+
+#img-container:hover{
+    border-radius: 15px;
+    transition: all 0.13s;
+}
+
+#grid-galerie img:hover {
+    opacity: 0.5;
+    transform: scale(1.2);
+    transform-origin: top center;
+    border-radius: 15px;
+    transition: all 0.13s;
+}
+
+#grid-galerie figcaption {
+    text-align: center;
+    counter-increment: nrimag 1; /* nrimag+=2 */
+}
+
+#grid-galerie figcaption::before {
+    content: counter(nrimag, lower-roman) ")";
+}
+
+#gol {
+    grid-area: z-gol;
+}
+
+#gol2 {
+    grid-area: z-gol2;
+}
+
+#grid-galerie, #reflexie-container, #container-animat{
+    border: var(--grosime-border) solid var(--secundar);
+    background-color: var(--info);
+    padding: var(--padding_pagina);
+    border-radius: 1em;
+    max-width: 100vw;
+    box-shadow: 0.05em 0.05em 0.05em 0.05em #e07e07 inset,
+        -0.05em -0.05em 0.05em 0.05em #e07e07 inset,
+        -0.05em 0.05em 0.05em 0.05em #e07e07 inset,
+        0.05em -0.05 0.05 0.05 #e07e07 inset;
+}
+
+#reflexie-container{
+    margin-bottom: 1em;
+}
