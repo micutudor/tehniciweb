@@ -156,6 +156,9 @@
                             <li class="list-group-item">
                               <a href="#" onclick="excludeAtFilter(<%- produs.id %>)" class="btn btn-warning"><i class="fa-solid fa-unlock"></i></a>
                               <a href="#" onclick="hide(<%- produs.id %>)" class="btn btn-info"><i class="fa-regular fa-eye-slash"></i></a>
+                              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal_<%- produs.id %>">
+                                Modal
+                              </button>
                             </li>
                           </ul>
                       </div>
@@ -163,6 +166,42 @@
                 <% } %>
                 </div>
             </div>
+            <%
+              for (let produs of produse) { 
+
+                const months = ['Ianuarie', 'Februarie', 'Martie', 'Aprilie', 'Mai', 'Iunie', 'Iulie', 'August', 'Septembrie',
+                                'Octombrie', 'Noiembrie', 'Decembrie'];
+                let dataEv = new Date(produs.data_eveniment);
+                let dataFormatata = dataEv.getDate() + ' ' + months[dataEv.getMonth()] + ' ' + dataEv.getFullYear();
+              %>
+              <div class="modal fade" id="modal_<%- produs.id %>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-5" id="exampleModalLabel"><%- produs.nume %></h1>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <img src="../../res/img/produse/<%- produs.imagine %>" class="card-img-top" alt="...">
+                      <p><%- produs.descriere %></p>
+                      <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Pret: <span class="pret"><%- produs.pret %></span> RON</li>
+                        <li class="list-group-item">Categorii: <span class="badge bg-secondary"><%- produs.categorie %></span><span class="badge bg-secondary ms-2"><%- produs.subcategorie %></span></li>
+                        <li class="list-group-item">Data: <time><%- dataFormatata %></time></li>
+                        <li class="list-group-item">Oras: <%- produs.localitate %></li>
+                        <li class="list-group-item">Locuri disponibile: <span class="locuridisp"><%- produs.locuri_disponibile %></span></li>
+                        <li class="list-group-item">Bilete disponibile: <%- produs.activ %></li>
+                        <li class="list-group-item">Artisti:
+                            <% for (let artist of produs.artisti) { %>
+                                <span class="badge bg-secondary"><%- artist %></span>
+                            <% } %>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <% } %>
         </main>
         <footer>
             <%- include('../fragmente/footer'); %>
