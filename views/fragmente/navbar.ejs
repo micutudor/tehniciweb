@@ -9,6 +9,13 @@
         <li><a href="/index#concerte-iasi">Recomandari Iasi</a></li>
         <li><a href="/index#concerte-cluj-napoca">Recomandari Cluj-Napoca</a></li>
         <li><a href="/index#concerte-timisoara">Recomandari Timisoara</a></li>
+        <li><a href="/produse/toate">Toate biletele</a></li>
+        <%
+            for (let cat of categories) { %>
+                <li><a href="/produse/<%- cat.categorie %>">Bilete <%- cat.categorie %></a></li>
+        <%
+            }
+        %>
         <li><a href="#">Calendar concerte</a></li>
         <li><a href="#">Contul meu</a></li>
         <li><a href="/relatii-clienti">Relatii clienti</a></li>
@@ -22,6 +29,17 @@
                 <li><a href="/index#concerte-iasi">Iasi</a></li>
                 <li><a href="/index#concerte-cluj-napoca">Cluj-Napoca</a></li>
                 <li><a href="/index#concerte-timisoara">Timisoara</a></li>
+            </ul>
+        </li>
+        <li><a href="/produse/toate">Bilete</a>
+            <ul>
+                <li><a href="/produse/toate">Toate biletele</a></li>
+                <%
+                    for (let cat of categories) { %>
+                        <li><a href="/produse/<%- cat.categorie %>">Bilete <%- cat.categorie %></a></li>
+                <%
+                    }
+                %>
             </ul>
         </li>
         <li><a href="#">Calendar concerte</a></li>

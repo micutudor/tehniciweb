@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ro">
+    <head>
+        <%- include('../fragmente/head'); %>
+
+        <title>HaiLaConcert.ro | Bilete concerte</title>
+
+        <script src="../../res/js/produse.js"></script>
+    </head>
+    <body>
+        <header>
+            <%- include('../fragmente/navbar'); %>
+        </header>
+        <main>
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="card mt-3 mb-3" style="width: 100%;">
+                        <div class="card-body">
+                          <h5 class="card-title">Filtrează</h5>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                          <li class="list-group-item">
+                            <label for="inputName">Denumire produs</label>
+                            <input id="denumireProdus" class="form-control" type="text" name="denumire_produs"/>
+                          </li>
+                          <li class="list-group-item">
+                            <label for="customRange3">Numar minim locuri</label>
+                            <div class="row">
+                              <div class="col d-flex flex-row">
+                                <div class="p-2"><%- minlocuri %></div>
+                              </div>     
+                              <div class="col d-flex flex-row-reverse">
+                                <div class="p-2"><%- maxlocuri %></div>
+                              </div>                          
+                            </div>
+                            <input type="range" class="form-range" min="<%- minlocuri %>" max="<%- maxlocuri %>" step="1" id="numarLocuri" value="<%- minlocuri %>">
+                            <p id="curValRange" class="text-center"><%- minlocuri %></p>
+                          </li>
+                          <li class="list-group-item">
+                            <label for="customRange3">Main artist</label>
+                            <input class="form-control" list="datalistOptions" id="mainArtist">
+                            <datalist id="datalistOptions">
+                              <% for (let artist of artisti) { %>
+                                <option value="<%- artist %>">
+                              <% } %>
+                            </datalist>
+                          </li>
+                          <li class="list-group-item">
+                            <label for="inputName">Disponibil</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="flexRadioDefault" value="da" id="disponibilDa">
+                                <label class="form-check-label" for="flexRadioDefault1">
+                                  Da
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="flexRadioDefault" value="nu" id="disponibilNu">
+                                <label class="form-check-label" for="flexRadioDefault2">
+                                  Nu
+                                </label>
+                            </div>
+                            <div class="form-check">
+                              <input class="form-check-input" type="radio" name="flexRadioDefault" value="toate" id="disponibilToate" checked>
+                              <label class="form-check-label" for="flexRadioDefault3">
+                                Toate
+                              </label>
+                            </div>
+                          </li>
+                          <!-- <li class="list-group-item">
+                            <textarea class="form-control"></textarea>
+                          </li> -->
+                          <!-- <li class="list-group-item">
+                              <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                  Default checkbox
+                                </label>
+                              </div>
+                              <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
+                                <label class="form-check-label" for="flexCheckChecked">
+                                  Checked checkbox
+                                </label>
+                            </div>
+                          </li> -->
+                          <li class="list-group-item">
+                            <label>Localitate</label>
+                            <select class="form-select" aria-label="Default select example" id="localitate">
+                                <option selected>---</option>
+                                <% for (let loc of localitati) { %>
+                                  <option value="<%- loc.localitate %>"><%- loc.localitate %></option>
+                                <% } %>
+                            </select>
+                          </li>
+                          <li class="list-group-item">
+                            <label>Tip muzica</label>
+                            <select class="form-select" aria-label="Default select example" id="tip_muzica">
+                              <option selected>---</option>
+                              <% for (let tm of tip_muzica) { %>
+                                <option value="<%- tm.subcategorie %>"><%- tm.subcategorie %></option>
+                              <% } %>
+                            </select>
+                          </li>
+                        </ul>
+                        <div class="card-body">
+                          <div class="row">
+                            <div class="col-lg-6">
+                              <div class="row">
+                                <div class="col-6">
+                                  <a href="#" class="card-link btn btn-light" id="asc">Asc</a>
+                                </div>
+                                <div class="col-6">
+                                  <a href="#" class="card-link btn btn-light" id="desc">Desc</a>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-lg-3">
+                              <a href="#" class="card-link btn btn-danger" id="reset">Reset</a>
+                            </div>
+                            <div class="col-lg-3">
+                              <a href="#" class="card-link btn btn-primary" id="filter">Filtreaza</a>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                  <p id="noProductsMsg" style="display: none;">Nu exista produse conform filtrării curente</p>
+                <%
+                  for (let produs of produse) { 
+
+                    const months = ['Ianuarie', 'Februarie', 'Martie', 'Aprilie', 'Mai', 'Iunie', 'Iulie', 'August', 'Septembrie',
+                                    'Octombrie', 'Noiembrie', 'Decembrie'];
+                    let dataEv = new Date(produs.data_eveniment);
+                    let dataFormatata = dataEv.getDate() + ' ' + months[dataEv.getMonth()] + ' ' + dataEv.getFullYear();
+                  %>
+                    <div class="produs" id="elem_<%- produs.id %>" style="display: block;" avoidFilter="no">
+                      <div class="card mt-3 mb-3" style="width: 24rem;">
+                          <img src="../../res/img/produse/<%- produs.imagine %>" class="card-img-top" alt="...">
+                          <div class="card-body">
+                          <h5 class="card-title"><a class="numeProdus" href="/produs/<%- produs.id %>"><%- produs.nume %></a></h5>
+                          <p class="card-text"><%- produs.descriere %></p>
+                          </div>
+                          <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Pret: <span class="pret"><%- produs.pret %></span> RON</li>
+                            <li class="list-group-item">Categorii: <span class="badge bg-secondary"><%- produs.categorie %></span><span class="badge bg-secondary ms-2"><%- produs.subcategorie %></span></li>
+                            <li class="list-group-item">Data: <time><%- dataFormatata %></time></li>
+                            <li class="list-group-item">Oras: <%- produs.localitate %></li>
+                            <li class="list-group-item">Locuri disponibile: <span class="locuridisp"><%- produs.locuri_disponibile %></span></li>
+                            <li class="list-group-item">Bilete disponibile: <%- produs.activ %></li>
+                            <li class="list-group-item">Artisti:
+                                <% for (let artist of produs.artisti) { %>
+                                    <span class="badge bg-secondary"><%- artist %></span>
+                                <% } %>
+                            </li>
+                            <li class="list-group-item">
+                              <a href="#" onclick="excludeAtFilter(<%- produs.id %>)" class="btn btn-warning"><i class="fa-solid fa-unlock"></i></a>
+                              <a href="#" onclick="hide(<%- produs.id %>)" class="btn btn-info"><i class="fa-regular fa-eye-slash"></i></a>
+                            </li>
+                          </ul>
+                      </div>
+                    </div>
+                <% } %>
+                </div>
+            </div>
+        </main>
+        <footer>
+            <%- include('../fragmente/footer'); %>
+        </footer>
+    </body>
+</html>

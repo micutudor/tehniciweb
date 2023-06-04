@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ro">
+    <head>
+        <%- include('../fragmente/head'); %>
+
+        <title>HaiLaConcert.ro | Bilete concerte</title>
+    </head>
+    <body>
+        <header>
+            <%- include('../fragmente/navbar'); %>
+        </header>
+        <main>
+            <img src="../../res/img/produse/<%- produs.imagine %>" class="card-img-top" alt="...">
+            <ul class="list-group list-group-flush mb-3">
+                <li class="list-group-item"><h5 class="card-title"><%- produs.nume %></h5></li>
+                <li class="list-group-item"><p class="card-text"><%- produs.descriere %></p></li>
+                <li class="list-group-item">Pret: <%- produs.pret %> RON</li>
+                <li class="list-group-item">Categorii: <span class="badge bg-secondary"><%- produs.categorie %></span><span class="badge bg-secondary ms-2"><%- produs.subcategorie %></span></li>
+                <%
+                    const months = ['Ianuarie', 'Februarie', 'Martie', 'Aprilie', 'Mai', 'Iunie', 'Iulie', 'August', 'Septembrie',
+                                    'Octombrie', 'Noiembrie', 'Decembrie'];
+                    let dataEv = new Date(produs.data_eveniment);
+                    let dataFormatata = dataEv.getDate() + ' ' + months[dataEv.getMonth()] + ' ' + dataEv.getFullYear();
+                %>
+                <li class="list-group-item">Data: <time><%- dataFormatata %></time></li>
+                <li class="list-group-item">Localitate: <%- produs.localitate %></li>
+                <li class="list-group-item">Locuri disponibile: <%- produs.locuri_disponibile %></li>
+                <li class="list-group-item">Bilete disponibile: <%- produs.activ %></li>
+                <li class="list-group-item">Artisti:
+                    <% for (let artist of produs.artisti) { %>
+                        <span class="badge bg-secondary"><%- artist %></span>
+                    <% } %>
+                </li>
+            </ul>
+        </main>
+        <footer>
+            <%- include('../fragmente/footer'); %>
+        </footer>
+    </body>
+</html>

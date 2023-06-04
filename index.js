@@ -1,3 +1,8 @@
+/* TODO:
+ * Bonus9, Bonus11
+ * 
+ */
+
 const express = require('express');
 const app = express();
 
@@ -5,6 +10,30 @@ const fs = require('fs');
 const path = require("path");
 
 const sass = require("sass");
+
+const {Client} = require("pg");
+
+const config = ({
+    host: "localhost",
+    user: "postgres",
+    port: 5432,
+    password : "1234",
+    database : "tehniciweb"
+
+});
+
+const client = new Client(config);
+
+let categorii = [];
+
+client.connect();
+
+client.query('SELECT categorie FROM produs GROUP BY categorie', (err, res) => {
+    if (err)
+        console.log(err);
+    else
+        categorii = res.rows;
+});
 
 console.log("index.js este la: " + __dirname);
 console.log("calea fisierului: " + __filename);
@@ -17,6 +46,18 @@ const globalPaths = {
     folderCss: path.join(__dirname, "res", "css"),
     folderBackup: path.join(__dirname, "res/backup"),
 }
+
+Array.prototype.unique = function() {
+    var a = this.concat();
+    for(var i=0; i<a.length; ++i) {
+        for(var j=i+1; j<a.length; ++j) {
+            if(a[i] === a[j])
+                a.splice(j--, 1);
+        }
+    }
+
+    return a;
+};
 
 for (let folder of folders) {
     let folderPath = path.join(__dirname, folder);
@@ -92,7 +133,77 @@ app.get("/*.ejs", function (req, res) {
 });
 
 app.get(['/', '/index', '/home'], (req, res) => {
-    return res.render("pagini/index", { ip: req.socket.remoteAddress, gallery: galleryImages });
+    return res.render("pagini/index", { ip: req.socket.remoteAddress, gallery: galleryImages, categories: categorii });
+});
+
+app.get('/produs/:id', (req, res) => {
+    client.query('SELECT * FROM produs WHERE id = $1', [req.params.id], (err, rez) => {
+        if (err)
+            console.log(err);
+        else
+            return res.render('pagini/produs', { produs: rez.rows[0], categories: categorii });
+    });
+});
+
+app.get('/produse/:cat', (req, res) => {
+    let categorie = req.params.cat;
+    
+    let artisti = [];
+
+    client.query('SELECT artisti FROM produs GROUP BY artisti', (err, rez) => {
+        if (err)
+            console.log(err);
+        else
+        {
+            for (let i = 0; i < rez.rows.length; i ++)
+                artisti = artisti.concat(rez.rows[i].artisti).unique(); 
+        }   
+    });
+
+    let localitati;
+    client.query('SELECT localitate FROM produs GROUP BY localitate', (err, rez) => {
+        if (err)
+            console.log(err);
+        else
+        {
+            localitati = rez.rows;
+        }   
+    });
+
+    let tip_muzica;
+    client.query('SELECT subcategorie FROM produs GROUP BY subcategorie', (err, rez) => {
+        if (err)
+            console.log(err);
+        else
+        {
+            tip_muzica = rez.rows;
+        }   
+    });
+
+    let minlocuri, maxlocuri;
+    client.query('SELECT min(locuri_disponibile) as minloc, max(locuri_disponibile) as maxloc FROM produs', (err, rez) => {
+        if (err)
+            console.log(err);
+        else
+        {
+            minlocuri = rez.rows[0].minloc;
+            maxlocuri = rez.rows[0].maxloc;
+        }   
+    });
+
+    let query;
+    if (categorie == 'toate')
+        query = 'SELECT * FROM produs';
+    else 
+        query = "SELECT * FROM produs WHERE categorie = '" + categorie + "'";
+
+    client.query(query, (err, rez) => {
+        if (err)
+            console.log(err);
+        else {
+            return res.render('pagini/produse', { produse: rez.rows, categories: categorii, artisti, localitati, tip_muzica, minlocuri, maxlocuri });
+        }        
+    });
 });
 
 app.get('/*', (req, res) => {
