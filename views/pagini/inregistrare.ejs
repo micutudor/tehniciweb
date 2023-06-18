@@ -28,28 +28,57 @@
 
         <p id="eroare1" style="display: none;">Toate campurile sunt obligatorii!</p>
         <p id="eroare2" style="display: none;">Parolele nu se potrivesc!</p>
+        <p id="eroare3" style="display: none;">Parola trebuie sa aiba minim 6 caractere!</p>
+        <p id="eroare4" style="display: none;">Data nasterii invalida!</p>
     </div>
 
     <script>
-        window.onload() = function () {
-            signup.onclick() = function() {
-                const nume = document.getElementById('inp-nume');
-                const username = document.getElementById('inp-username');
-                const prenume = document.getElementById('inp-prenume');
-                const telefon = document.getElementById('inp-telefon');
-                const data_nasterii = document.getElementById('inp-data');
-                const parola = document.getElementById('parl');
-                const rparola = document.getElementById('rparl');
-                const email = document.getElementById('email');
-                
-                if (nume == null || username == null || prenume == null || telefon == null
-                || data_nasterii == null || parola == null || rparola == null || email == null)
-                    document.getElementById('eroare1').style.display = 'block';
-
-                if (parola != rparola);
-                    document.getElementById('eroare2').style.display = 'block';
-            }
+        window.onload = function () {
+            document.getElementById('inp-data').setAttribute('max', new Date().toISOString().split("T")[0]);
         }
+
+        document.getElementById('eroare1').style.display = 'none';
+        document.getElementById('eroare2').style.display = 'none';
+        document.getElementById('eroare3').style.display = 'none';
+        document.getElementById('eroare4').style.display = 'none';
+        document.getElementById('form_inreg').addEventListener('submit', event => {
+            const nume = document.getElementById('inp-nume').value;
+            const username = document.getElementById('inp-username').value;
+            const prenume = document.getElementById('inp-prenume').value;
+            const telefon = document.getElementById('inp-telefon').value;
+            const data_nasterii = document.getElementById('inp-data').value;
+            const parola = document.getElementById('parl').value;
+            const rparola = document.getElementById('rparl').value;
+            const email = document.getElementById('inp-email').value;
+            console.log(nume);
+            
+            let c = true;
+            if (nume == null || username == null || prenume == null || telefon == null
+            || data_nasterii == null || parola == null || rparola == null || email == null) {
+                document.getElementById('eroare1').style.display = 'block';
+                c = false;
+            }
+
+            if (parola != rparola) {
+                document.getElementById('eroare2').style.display = 'block';
+                c = false;
+            }
+            
+            if (parola.length < 6)
+            {
+                document.getElementById('eroare3').style.display = 'block';
+                c = false;
+            }
+
+            if (new Date(data_nasterii) > new Date())
+            {
+                document.getElementById('eroare4').style.display = 'block';
+                c = false;
+            }
+
+            if (!c)
+                event.preventDefault();
+        });
     </script>
 </main>
 

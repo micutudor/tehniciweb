@@ -1,4 +1,4 @@
-<form id="form_inreg"  method="post" class="date"  action="<%= locals.action %>"  enctype="multipart/form-data" >
+<form id="form_inreg"  method="post" action="<%= locals.action %>"  enctype="multipart/form-data" >
     <p>
         <label>
             Username: <input type="text" name="username" id="inp-username" value="prof<%= Math.floor(Math.random()*100000) %>" required pattern="[A-Za-z0-9#_./]+">
@@ -21,7 +21,7 @@
     </p>
     <p>
         <label>
-            Data nasterii: <input id="data_nasterii" id="inp-data" type="date" required  name="data_nasterii" required>
+            Data nasterii: <input id="inp-data" type="date" required  name="data_nasterii" required>
         </label>
     </p>
     <p>

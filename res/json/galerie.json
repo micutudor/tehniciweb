@@ -17,37 +17,37 @@
             "cale_fisier":"electriccastle.jpg",
             "titlu":"Electric Castle",
             "text_descriere":"Electric Castle Cluj",
-            "anotimp":"primavara"
+            "anotimp":"vara"
         },
         {
             "cale_fisier":"neversea.jpg",
             "titlu":"Neversea",
             "text_descriere":"Neversea Constanta",
-            "anotimp":"primavara"
+            "anotimp":"vara"
         },
         {
             "cale_fisier":"saga.jpeg",
             "titlu":"SAGA",
             "text_descriere":"SAGA Bucuresti",
-            "anotimp":"primavara"
+            "anotimp":"vara"
         },
         {
             "cale_fisier":"summerwell.jpg",
             "titlu":"SummerWell",
             "text_descriere":"SummerWell Bucuresti",
-            "anotimp":"primavara"
+            "anotimp":"vara"
         },
         {
             "cale_fisier":"sunwaves.png",
             "titlu":"SunWaves",
             "text_descriere":"SunWaves Olimp",
-            "anotimp":"primavara"
+            "anotimp":"vara"
         },
         {
             "cale_fisier":"untold.jpg",
             "titlu":"Untold",
             "text_descriere":"Untold Cluj",
-            "anotimp":"primavara"
+            "anotimp":"vara"
         }
     ]
 }

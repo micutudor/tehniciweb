@@ -10,7 +10,7 @@ class Utilizator{
     static tipConexiune="local";
     static tabel="utilizator"
     static parolaCriptare="tehniciweb";
-    static emailServer="test.tweb.node@gmail.com";
+    static emailServer="tudordelahailaconcert@gmail.com";
     static lungimeCod=64;
     static numeDomeniu="localhost:8080";
     #eroare;
@@ -84,8 +84,8 @@ class Utilizator{
             if(err)
                 console.log(err);
             else
-                utiliz.trimiteMail("Te-ai inregistrat cu succes","Username-ul tau este "+utiliz.username,
-            `<h1>Salut!</h1><p style='color:blue'>Username-ul tau este ${utiliz.username}.</p> <p><a href='http://${Utilizator.numeDomeniu}/cod/${utiliz.username}/${token}'>Click aici pentru confirmare</a></p>`,
+                utiliz.trimiteMail("Salut, stimate " + utiliz.nume,"Username-ul tau este "+utiliz.username,
+            `<h1>Salut!</h1><p style='color:blue'>Username-ul tau este ${utiliz.username} pe site-ul <u><i><b>HaiLaConcert</b></i></u></p> <p><a href='http://${Utilizator.numeDomeniu}/cod/${utiliz.username}/${token}'>Click aici pentru confirmare</a></p>`,
             )
         });
     }
@@ -98,7 +98,7 @@ class Utilizator{
             secure: false,
             auth:{//date login 
                 user:Utilizator.emailServer,
-                pass:"rwgmgkldxnarxrgu"
+                pass:"vwsluoemmlvooidd"
             },
             tls:{
                 rejectUnauthorized:false

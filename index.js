@@ -16,6 +16,7 @@ const sass = require("sass");
 
 const formidable = require("formidable");
 const {Utilizator}=require("./module_proprii/utilizator.js")
+const AccesBD=require("./module_proprii/accesbd.js")
 const session=require('express-session');
 const Drepturi = require("./module_proprii/drepturi.js");
 
@@ -29,6 +30,12 @@ const config = ({
     database : "tehniciweb"
 
 });
+
+app.use(session({ // aici se creeaza proprietatea session a requestului (pot folosi req.session)
+    secret: 'abcdefg',//folosit de express session pentru criptarea id-ului de sesiune
+    resave: true,
+    saveUninitialized: false
+}));
 
 const client = new Client(config);
 
@@ -147,23 +154,27 @@ app.get(['/', '/index', '/home'], (req, res) => {
 app.post("/inregistrare",function(req, res){
     var username;
     var poza;
-    var formular= new formidable.IncomingForm()
+    var formular= new formidable.IncomingForm();
     formular.parse(req, function(err, campuriText, campuriFisier ){//4
         console.log("Inregistrare:",campuriText);
 
+        console.log('-----------------------');
         console.log(campuriFisier);
         console.log(poza, username);
+        console.log('-----------------------');
         var eroare="";
+
+        if (campuriText.nume == undefined || campuriText.username == undefined || campuriText.email == undefined || campuriText.parola == undefined
+            || campuriText.rparola == undefined)
+            return res.render("pagini/inregistrare", {err: "Toate campurile sunt obligatorii!", categories: categorii});
+        
+        var regex = /^\+407\d{8}$/;
+
+        if (!regex.test(campuriText.telefon))
+            return res.render("pagini/inregistrare", {err: "Telefon invalid!", categories: categorii});
 
         var utilizNou=new Utilizator();
         try{
-            if (campuriText.nume == undefined || campuriText.username == undefined || campuriText.email == undefined || campuriText.parola == undefined
-                || campuriText.rparola == undefined)
-                res.render("pagini/inregistrare", {err: "Toate campurile sunt obligatorii!", categories: categorii});
-
-            if (!/^(\+)?[0][0-9]{9,}$/.test(campuriText.telefon))
-                res.render("pagini/inregistrare", {err: "Telefon invalid!", categories: categorii});
-
             utilizNou.setareNume=campuriText.nume;
             utilizNou.setareUsername=campuriText.username;
             utilizNou.email=campuriText.email
@@ -233,6 +244,58 @@ app.post("/inregistrare",function(req, res){
         console.log(nume,fisier);
     }); 
 });
+
+app.post("/login",function(req, res){
+    console.log("ceva");
+    var formular= new formidable.IncomingForm()
+    formular.parse(req, function(err, campuriText, campuriFisier ){
+        Utilizator.getUtilizDupaUsername (campuriText.username,{
+            req:req,
+            res:res,
+            parola:campuriText.parola
+        }, function(u, obparam ){
+            let parolaCriptata=Utilizator.criptareParola(obparam.parola);
+            if(u.parola==parolaCriptata && u.confirmat_mail ){
+                u.poza=u.poza?path.join("poze_uploadate",u.username, u.poza):"";
+                obparam.req.session.utilizator=u;
+                
+                obparam.req.session.mesajLogin="Bravo! Te-ai logat!";
+                obparam.res.redirect("/index");
+                //obparam.res.render("/login");
+            }
+            else{
+                console.log("Eroare logare")
+                obparam.req.session.mesajLogin="Date logare incorecte sau nu a fost confirmat mailul!";
+                obparam.res.redirect("/index");
+            }
+        })
+    });
+});
+
+app.get("/cod/:username/:token",function(req,res){
+    console.log(req.params);
+    try {
+        Utilizator.getUtilizDupaUsername(req.params.username,{res:res,token:req.params.token} ,function(u,obparam){
+            AccesBD.getInstanta().update(
+                {tabel:"utilizator",
+                campuri:{confirmat_mail:'true'}, 
+                conditiiAnd:[`cod='${obparam.token}'`]}, 
+                function (err, rezUpdate){
+                    if(err || rezUpdate.rowCount==0){
+                        console.log("Cod:", err);
+                        showError(res,3);
+                    }
+                    else{
+                        res.render("pagini/confirmare.ejs", {categories: categorii});
+                    }
+                })
+        })
+    }
+    catch (e){
+        console.log(e);
+        renderError(res,2);
+    }
+})
 
 app.get('/produs/:id', (req, res) => {
     client.query('SELECT * FROM produs WHERE id = $1', [req.params.id], (err, rez) => {
@@ -345,7 +408,7 @@ function showError(res, cod, titlu, text, img)
     text = (text === undefined ? err[0].text : text);
     img = (img === undefined ? errorsList.cale_baza + '/' + err[0].imagine : img);
 
-    res.render("pagini/eroare", {cod, titlu, text, img});
+    res.render("pagini/eroare", {cod, titlu, text, img, categories: categorii});
 }
 
 function readGallery()
