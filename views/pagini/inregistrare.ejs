@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html  lang="ro">
+    <head>
+        <meta name="description" content="Cofetaria Dulcelind - înregistrare utilizatori.">
+        <meta name="keywords" content="cofetarie, Dulcelind, inregistrare, utilizatori">
+        <link rel="stylesheet" href="/resurse/css/produse.css" type="text/css" />
+        <title>Inregistrare | HaiLaConcert</title>
+        <%- include("../fragmente/head") %>     
+        <script type="text/javascript" src=/resurse/js/inregistrare.js></script>
+    </head>
+    <body>
+    <%- include("../fragmente/navbar") %>
+
+    <main>
+    <div class="afisaj">
+        <h1>Inregistrare utilizator</h1>
+        <% if(!locals.raspuns) { %>    
+
+			<%-include("../fragmente/formular", {action: "/inregistrare"}) %>
+        <% } %>
+        
+	<% if(locals.raspuns) { %>
+	<%- locals.raspuns+"<br/>"%>
+	<% } %>
+	<% if(locals.err) { %>
+	<%- locals.err %>
+	<% } %>
+
+        <p id="eroare1" style="display: none;">Toate campurile sunt obligatorii!</p>
+        <p id="eroare2" style="display: none;">Parolele nu se potrivesc!</p>
+    </div>
+
+    <script>
+        window.onload() = function () {
+            signup.onclick() = function() {
+                const nume = document.getElementById('inp-nume');
+                const username = document.getElementById('inp-username');
+                const prenume = document.getElementById('inp-prenume');
+                const telefon = document.getElementById('inp-telefon');
+                const data_nasterii = document.getElementById('inp-data');
+                const parola = document.getElementById('parl');
+                const rparola = document.getElementById('rparl');
+                const email = document.getElementById('email');
+                
+                if (nume == null || username == null || prenume == null || telefon == null
+                || data_nasterii == null || parola == null || rparola == null || email == null)
+                    document.getElementById('eroare1').style.display = 'block';
+
+                if (parola != rparola);
+                    document.getElementById('eroare2').style.display = 'block';
+            }
+        }
+    </script>
+</main>
+
+<footer>
+    <%- include("../fragmente/footer") %>
+</footer>
+
+</body>
+</html>

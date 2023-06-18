@@ -1,7 +1,10 @@
-/* TODO:
- * Bonus11
- * 
- */
+/* todo: sistem_utilizatori
+* 3 - filtre din FE si alea 2 la alegere
+* 4 - continut mail, schimbat mail
+* 5, 6,7,8,9,11,12,13
+* +
+* bugfixes
+*/
 
 const express = require('express');
 const app = express();
@@ -10,6 +13,11 @@ const fs = require('fs');
 const path = require("path");
 
 const sass = require("sass");
+
+const formidable = require("formidable");
+const {Utilizator}=require("./module_proprii/utilizator.js")
+const session=require('express-session');
+const Drepturi = require("./module_proprii/drepturi.js");
 
 const {Client} = require("pg");
 
@@ -136,6 +144,96 @@ app.get(['/', '/index', '/home'], (req, res) => {
     return res.render("pagini/index", { ip: req.socket.remoteAddress, gallery: galleryImages, categories: categorii });
 });
 
+app.post("/inregistrare",function(req, res){
+    var username;
+    var poza;
+    var formular= new formidable.IncomingForm()
+    formular.parse(req, function(err, campuriText, campuriFisier ){//4
+        console.log("Inregistrare:",campuriText);
+
+        console.log(campuriFisier);
+        console.log(poza, username);
+        var eroare="";
+
+        var utilizNou=new Utilizator();
+        try{
+            if (campuriText.nume == undefined || campuriText.username == undefined || campuriText.email == undefined || campuriText.parola == undefined
+                || campuriText.rparola == undefined)
+                res.render("pagini/inregistrare", {err: "Toate campurile sunt obligatorii!", categories: categorii});
+
+            if (!/^(\+)?[0][0-9]{9,}$/.test(campuriText.telefon))
+                res.render("pagini/inregistrare", {err: "Telefon invalid!", categories: categorii});
+
+            utilizNou.setareNume=campuriText.nume;
+            utilizNou.setareUsername=campuriText.username;
+            utilizNou.email=campuriText.email
+            utilizNou.prenume=campuriText.prenume
+            
+            utilizNou.parola=campuriText.parola;
+            utilizNou.telefon=campuriText.telefon;
+            utilizNou.data_nasterii=campuriText.data_nasterii;
+            utilizNou.culoare_chat=campuriText.culoare_chat;
+            utilizNou.poza= poza;
+
+            Utilizator.getUtilizDupaUsername(campuriText.username, {}, function(u, parametru ,eroareUser ){
+                if (eroareUser==-1){//nu exista username-ul in BD
+                    utilizNou.salvareUtilizator();
+                }
+                else{
+                    eroare+="Mai exista username-ul";
+                }
+
+                if(!eroare){
+                    res.render("pagini/inregistrare", {raspuns:"Inregistrare cu succes!", categories: categorii})
+                    
+                }
+                else
+                    res.render("pagini/inregistrare", {err: "Eroare: "+eroare, categories: categorii});
+            })
+            
+
+        }
+        catch(e){ 
+            console.log(e);
+            eroare+= "Eroare site; reveniti mai tarziu";
+            console.log(eroare);
+            res.render("pagini/inregistrare", {err: "Eroare: "+eroare, categories: categorii})
+        }
+    
+
+
+
+    });
+    formular.on("field", function(nume,val){  // 1 
+        console.log(`--- ${nume}=${val}`);
+		
+        if(nume=="username")
+            username=val;
+    }) 
+    formular.on("fileBegin", function(nume,fisier){ //2
+        console.log("fileBegin");
+		
+        console.log(nume,fisier);
+		//TO DO in folderul poze_uploadate facem folder cu numele utilizatorului
+        let folderUser=path.join(__dirname, "poze_uploadate",username);
+        //folderUser=__dirname+"/poze_uploadate/"+username
+        console.log(folderUser);
+        if (!fs.existsSync(folderUser))
+            fs.mkdirSync(folderUser);
+        
+        fisier.filepath=path.join(folderUser, fisier.originalFilename)
+        poza=fisier.originalFilename;
+        //fisier.filepath=folderUser+"/"+fisier.originalFilename
+        console.log("fileBegin:",poza)
+        console.log("fileBegin, fisier:",fisier)
+
+    })    
+    formular.on("file", function(nume,fisier){//3
+        console.log("file");
+        console.log(nume,fisier);
+    }); 
+});
+
 app.get('/produs/:id', (req, res) => {
     client.query('SELECT * FROM produs WHERE id = $1', [req.params.id], (err, rez) => {
         if (err)
@@ -206,8 +304,16 @@ app.get('/produse/:cat', (req, res) => {
     });
 });
 
+app.get('/inregistrare', (req, res) => {
+    return res.render("pagini/inregistrare", {categories: categorii});
+});
+
+app.get('/relatii-clienti', (req, res) => {
+    return res.render("pagini/relatii-clienti", {categories: categorii});
+});
+
 app.get('/*', (req, res) => {
-    return res.render("pagini/" + req.url, function (err, result) {
+    return res.render("pagini/" + req.url, { categories: categorii }, function (err, result) {
         if (err) {
             if (err.message.startsWith("Failed to lookup view"))
                 showError(res, 404);

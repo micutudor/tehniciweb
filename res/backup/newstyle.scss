@@ -178,6 +178,7 @@ a, a:visited, a:hover, a:active {
   grid-area: butoane-iframe;
   flex-direction: column;
   gap: 5px;
+  margin-right: -20%;
 }
 
 .buton-iframe {
@@ -273,7 +274,8 @@ nav {
   background-color: var(--secundar);
   width: 99.7vw;
   height: 80px;
-  position: sticky;
+  position: sticky !important;
+  z-index: 9999;
   padding: 0;
   transform: translate(-20px, -7px);
 }
