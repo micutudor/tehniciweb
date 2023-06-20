@@ -10,9 +10,22 @@
             <p id="banner">
                 Acesta este un proiect școlar!
             </p>
-            <%- include('../fragmente/navbar'); %>
+            <% console.log(sesiune) %>
+            <%- include('../fragmente/navbar', {sesiune}); %>
         </header>
         <main>
+            <div class="text-center">
+                <% if (sesiune && sesiune.utilizator) { %>
+                        <div class="row">
+                            <div class="col">
+                                <img width="10%" style="border-radius: 20%;" src="./<%- sesiune.utilizator.poza %>">
+                            </div>
+                            <div class="col">
+                                <h1>Salut, <%- sesiune.utilizator.username %>!</h1>
+                            </div>
+                        </div>
+                <% } %>
+            </div>
             <div class="grid">
                 <div class="zona-prezentare">
                     <figure>

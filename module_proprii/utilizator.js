@@ -67,7 +67,8 @@ class Utilizator{
     salvareUtilizator(){
         let parolaCriptata=Utilizator.criptareParola(this.parola);
         let utiliz=this;
-        let token=parole.genereazaToken(100);
+        let token=parole.genereazaToken(50) + '-' + Date.now().toString();
+        let data_inscriere = new Date().toUTCString();
         AccesBD.getInstanta(Utilizator.tipConexiune).insert({tabel:Utilizator.tabel,
             campuri:{
                 username:this.username,
@@ -77,6 +78,7 @@ class Utilizator{
                 data_nasterii:this.data_nasterii,
                 parola:parolaCriptata,
                 email:this.email,
+                data_inregistrare: data_inscriere,
                 culoare_chat:this.culoare_chat,
                 cod:token,
                 poza:this.poza}
@@ -85,7 +87,7 @@ class Utilizator{
                 console.log(err);
             else
                 utiliz.trimiteMail("Salut, stimate " + utiliz.nume,"Username-ul tau este "+utiliz.username,
-            `<h1>Salut!</h1><p style='color:blue'>Username-ul tau este ${utiliz.username} pe site-ul <u><i><b>HaiLaConcert</b></i></u></p> <p><a href='http://${Utilizator.numeDomeniu}/cod/${utiliz.username}/${token}'>Click aici pentru confirmare</a></p>`,
+            `<h1>Salut!</h1><p style='color:blue'>Username-ul tau este ${utiliz.username} pe site-ul <u><i><b>HaiLaConcert</b></i></u></p> <p><a href='http://${Utilizator.numeDomeniu}/cod_mail/${token}/${utiliz.username}'>Click aici pentru confirmare</a></p>`,
             )
         });
     }

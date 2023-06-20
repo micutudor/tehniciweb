@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ro">
+	<head>
+		<title>Profil</title>
+		<%- include("../fragmente/head") %>
+    
+		<% if(sesiune.utilizator) { %>
+		<script>
+
+			// populez inputurile din pagina de profil cu datele din tabel (incarcate prin EJS)
+			window.addEventListener("DOMContentLoaded", function(){
+				document.getElementById("inp-username").value="<%= sesiune.utilizator.username %>";
+				document.getElementById("inp-username").readOnly=true;
+				document.getElementById("inp-nume").value="<%= sesiune.utilizator.nume %>";
+				document.getElementById("inp-prenume").value="<%= sesiune.utilizator.prenume %>";
+				document.getElementById("inp-email").value="<%= sesiune.utilizator.email %>";
+                document.getElementById("inp-data").value="<%= sesiune.utilizator.data_nasterii.substring(0, 10) %>";
+				document.getElementById("p-reintrod").remove();
+				var optiuni=document.getElementById("sel-culoare").options
+				for (let opt of optiuni)
+					if (opt.value=="<%= sesiune.utilizator.culoare_chat %>")
+						opt.selected=true;
+			});
+		</script>
+		<% } %>
+	</head>
+	<body class="container">
+		<header>
+			<%- include("../fragmente/navbar") %>
+		</header>
+		<main>
+			<% if(sesiune.utilizator) { %>
+			<section class="mb-3">
+				<h2>Profil</h2>
+				<p><%= locals.raspuns %></p>
+				<img width="15%" src="/<%- sesiune.utilizator.poza%>" alt="nu ati incarcat poza de profil" />
+			</section>
+			<%- include("../fragmente/formular",{ action:"/profil" }) %>
+		<% } else { %>
+			<p>Nu sunteti logat</p>
+		<% } %>
+		<p><%- locals.mesaj %></p>
+		
+		</main>	
+	<%- include("../fragmente/footer") %>
+	</body>
+</html>

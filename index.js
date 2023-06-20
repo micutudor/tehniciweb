@@ -134,9 +134,14 @@ const galleryImages = readGallery();
 app.set('view engine', 'ejs');
 
 app.use("/res", express.static(__dirname + "/res"));
+app.use("/poze_uploadate", express.static(__dirname + "/poze_uploadate"));
 
-app.use(/^\/Resurse(\/[a-zA-Z0-9]*(?!\.)[a-zA-Z0-9]*)*$/, function (req, res) {
-    showError(res, 403);
+app.use(/^\/res(\/[a-zA-Z0-9]*(?!\.)[a-zA-Z0-9]*)*$/, function (req, res) {
+    showError(res, req.sesiune, 403);
+});
+
+app.use(/^\/poze_uploadate(\/[a-zA-Z0-9]*(?!\.)[a-zA-Z0-9]*)*$/, function (req, res) {
+    showError(res, req.sesiune, 403);
 })
 
 app.get("/favicon.ico", function (req, res) {
@@ -144,11 +149,11 @@ app.get("/favicon.ico", function (req, res) {
 });
 
 app.get("/*.ejs", function (req, res) {
-    showError(res, 400);
+    showError(res, req.sesiune, 400);
 });
 
 app.get(['/', '/index', '/home'], (req, res) => {
-    return res.render("pagini/index", { ip: req.socket.remoteAddress, gallery: galleryImages, categories: categorii });
+    return res.render("pagini/index", { ip: req.socket.remoteAddress, gallery: galleryImages, categories: categorii, sesiune: req.session });
 });
 
 app.post("/inregistrare",function(req, res){
@@ -166,12 +171,12 @@ app.post("/inregistrare",function(req, res){
 
         if (campuriText.nume == undefined || campuriText.username == undefined || campuriText.email == undefined || campuriText.parola == undefined
             || campuriText.rparola == undefined)
-            return res.render("pagini/inregistrare", {err: "Toate campurile sunt obligatorii!", categories: categorii});
+            return res.render("pagini/inregistrare", {err: "Toate campurile sunt obligatorii!", categories: categorii, sesiune: req.sesiune});
         
         var regex = /^\+407\d{8}$/;
 
         if (!regex.test(campuriText.telefon))
-            return res.render("pagini/inregistrare", {err: "Telefon invalid!", categories: categorii});
+            return res.render("pagini/inregistrare", {err: "Telefon invalid!", categories: categorii, sesiune: req.sesiune});
 
         var utilizNou=new Utilizator();
         try{
@@ -195,11 +200,11 @@ app.post("/inregistrare",function(req, res){
                 }
 
                 if(!eroare){
-                    res.render("pagini/inregistrare", {raspuns:"Inregistrare cu succes!", categories: categorii})
+                    res.render("pagini/inregistrare", {raspuns:"Inregistrare cu succes!", categories: categorii, sesiune: req.sesiune})
                     
                 }
                 else
-                    res.render("pagini/inregistrare", {err: "Eroare: "+eroare, categories: categorii});
+                    res.render("pagini/inregistrare", {err: "Eroare: "+eroare, categories: categorii, sesiune: req.sesiune});
             })
             
 
@@ -208,7 +213,7 @@ app.post("/inregistrare",function(req, res){
             console.log(e);
             eroare+= "Eroare site; reveniti mai tarziu";
             console.log(eroare);
-            res.render("pagini/inregistrare", {err: "Eroare: "+eroare, categories: categorii})
+            res.render("pagini/inregistrare", {err: "Eroare: "+eroare, categories: categorii, sesiune: req.sesiune})
         }
     
 
@@ -247,7 +252,7 @@ app.post("/inregistrare",function(req, res){
 
 app.post("/login",function(req, res){
     console.log("ceva");
-    var formular= new formidable.IncomingForm()
+    var formular= new formidable.IncomingForm();
     formular.parse(req, function(err, campuriText, campuriFisier ){
         Utilizator.getUtilizDupaUsername (campuriText.username,{
             req:req,
@@ -260,19 +265,21 @@ app.post("/login",function(req, res){
                 obparam.req.session.utilizator=u;
                 
                 obparam.req.session.mesajLogin="Bravo! Te-ai logat!";
+                obparam.req.session.mesajLoginTip = "ok";
                 obparam.res.redirect("/index");
                 //obparam.res.render("/login");
             }
             else{
                 console.log("Eroare logare")
                 obparam.req.session.mesajLogin="Date logare incorecte sau nu a fost confirmat mailul!";
+                obparam.req.session.mesajLoginTip = "eroare";
                 obparam.res.redirect("/index");
             }
         })
     });
 });
 
-app.get("/cod/:username/:token",function(req,res){
+app.get("/cod_mail/:token/:username",function(req,res){
     console.log(req.params);
     try {
         Utilizator.getUtilizDupaUsername(req.params.username,{res:res,token:req.params.token} ,function(u,obparam){
@@ -283,26 +290,106 @@ app.get("/cod/:username/:token",function(req,res){
                 function (err, rezUpdate){
                     if(err || rezUpdate.rowCount==0){
                         console.log("Cod:", err);
-                        showError(res,3);
+                        showError(res, req.session, 3);
                     }
                     else{
-                        res.render("pagini/confirmare.ejs", {categories: categorii});
+                        res.render("pagini/confirmare.ejs", {categories: categorii, sesiune: req.sesiune});
                     }
                 })
         })
     }
     catch (e){
         console.log(e);
-        renderError(res,2);
+        showError(res, req.session, 2);
     }
-})
+});
+
+app.get("/logout", function(req, res){
+    req.session.destroy();
+    res.locals.utilizator=null;
+    res.render("pagini/logout", {categories: categorii, sesiune: req.session});
+});
+
+app.get("/profil", function(req,res){
+    console.log("hey");
+    return res.render("pagini/profil", {categories: categorii, sesiune: req.session});
+});
+
+app.post("/profil", function(req, res){
+    if (!req.session.utilizator){
+        showError(res, req.session, 403);
+        res.render("pagini/eroare",{titlu: "404", text:"Nu sunteti logat."});
+        return;
+    }
+
+    var poza;
+    var username;
+    var formular= new formidable.IncomingForm();
+ 
+    formular.parse(req,function(err, campuriText, campuriFile){
+        var parolaCriptata=Utilizator.criptareParola(campuriText.parola);
+        AccesBD.getInstanta().updateParametrizat(
+            {tabel:"utilizator",
+            campuri:["nume","prenume","email", "data_nasterii", "poza", "culoare_chat"],
+            valori:[`${campuriText.nume}`,`${campuriText.prenume}`,`${campuriText.email}`,`${campuriText.data_nasterii}`,`${poza}`,`${campuriText.culoare_chat}`],
+            conditiiAnd:[`parola='${parolaCriptata}'`, `username='${campuriText.username}'`]
+        },          
+        function(err, rez){
+            if(err){
+                console.log(err);
+                afisareEroare(res,2);
+                return;
+            }
+            console.log(rez.rowCount);
+            if (rez.rowCount==0){
+                res.render("pagini/profil",{categories: categorii, sesiune: req.session, mesaj:"Update-ul nu s-a realizat. Verificati parola introdusa."});
+                return;
+            }
+            else{            
+                req.session.utilizator.data_nasterii = campuriText.data_nasterii;
+                req.session.utilizator.nume= campuriText.nume;
+                req.session.utilizator.prenume= campuriText.prenume;
+                req.session.utilizator.email= campuriText.email;
+                req.session.utilizator.culoare_chat= campuriText.culoare_chat;
+                req.session.utilizator.poza = path.join("poze_uploadate", campuriText.username, poza);
+                res.locals.utilizator=req.session.utilizator;
+            }
+ 
+ 
+            res.render("pagini/profil",{categories: categorii, sesiune: req.session, mesaj:"Update-ul s-a realizat cu succes."});
+ 
+        });
+    });
+    formular.on("field", function(nume,val){  // 1 
+        console.log(`--- ${nume}=${val}`);
+		
+        if(nume=="username")
+            username=val;
+    }) 
+    formular.on("fileBegin", function(nume, fisier){ //2
+        let folderUser=path.join(__dirname, "poze_uploadate", username);
+
+        if (!fs.existsSync(folderUser))
+            fs.mkdirSync(folderUser);
+        
+        fisier.filepath = path.join(folderUser, fisier.originalFilename);
+        poza = fisier.originalFilename;
+
+        console.log("fileBegin:",poza)
+        console.log("fileBegin, fisier:",fisier)
+    })  
+    formular.on("file", function(nume,fisier){//3
+        console.log("file");
+        console.log(nume,fisier);
+    });   
+});
 
 app.get('/produs/:id', (req, res) => {
     client.query('SELECT * FROM produs WHERE id = $1', [req.params.id], (err, rez) => {
         if (err)
             console.log(err);
         else
-            return res.render('pagini/produs', { produs: rez.rows[0], categories: categorii });
+            return res.render('pagini/produs', { produs: rez.rows[0], categories: categorii, sesiune: req.session });
     });
 });
 
@@ -362,26 +449,26 @@ app.get('/produse/:cat', (req, res) => {
         if (err)
             console.log(err);
         else {
-            return res.render('pagini/produse', { produse: rez.rows, categories: categorii, artisti, localitati, tip_muzica, minlocuri, maxlocuri });
+            return res.render('pagini/produse', { produse: rez.rows, categories: categorii, artisti, localitati, tip_muzica, minlocuri, maxlocuri, sesiune: req.session });
         }        
     });
 });
 
 app.get('/inregistrare', (req, res) => {
-    return res.render("pagini/inregistrare", {categories: categorii});
+    return res.render("pagini/inregistrare", {categories: categorii, sesiune: req.session});
 });
 
 app.get('/relatii-clienti', (req, res) => {
-    return res.render("pagini/relatii-clienti", {categories: categorii});
+    return res.render("pagini/relatii-clienti", {categories: categorii, sesiune: req.session});
 });
 
 app.get('/*', (req, res) => {
-    return res.render("pagini/" + req.url, { categories: categorii }, function (err, result) {
+    return res.render("pagini/" + req.url, { categories: categorii, sesiune: req.session }, function (err, result) {
         if (err) {
             if (err.message.startsWith("Failed to lookup view"))
-                showError(res, 404);
+                showError(res, sesiune, 404);
             else
-                showError(res);
+                showError(res, sesiune);
         }
         else
             return res.send(result);
@@ -395,7 +482,7 @@ function readErrors()
     return JSON.parse(data);
 }
 
-function showError(res, cod, titlu, text, img)
+function showError(res, sesiune, cod, titlu, text, img)
 {
     let err;
 
@@ -408,7 +495,7 @@ function showError(res, cod, titlu, text, img)
     text = (text === undefined ? err[0].text : text);
     img = (img === undefined ? errorsList.cale_baza + '/' + err[0].imagine : img);
 
-    res.render("pagini/eroare", {cod, titlu, text, img, categories: categorii});
+    res.render("pagini/eroare", {cod, titlu, text, img, categories: categorii, sesiune});
 }
 
 function readGallery()

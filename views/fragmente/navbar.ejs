@@ -2,24 +2,29 @@
     <div class="col align-self-center">
         <h1>HaiLaConcert.ro</h1>
     </div>
-    <div class="col-md-3 offset-md-1">
-        <form action="/login" method="post">
-            <div class="card" style="width: 22rem;">
-                <div class="card-body">
-                    <h5 class="card-title">Log in</h5>
-                    <div class="row">
-                        <div class="col">
-                            <input type="text" class="form-control form-control-sm" name="username" placeholder="Username">
+    <% if (sesiune && sesiune.utilizator === undefined) { %>
+        <div class="col-md-3 offset-md-1">
+            <form action="/login" method="post">
+                <div class="card" style="width: 22rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">Log in</h5>
+                        <div class="row">
+                            <div class="col">
+                                <input type="text" class="form-control form-control-sm" name="username" placeholder="Username">
+                            </div>
+                            <div class="col">
+                                <input type="password" class="form-control form-control-sm" name="parola" placeholder="Parola">
+                            </div>
                         </div>
-                        <div class="col">
-                            <input type="password" class="form-control form-control-sm" name="parola" placeholder="Parola">
-                        </div>
+                        <% if (sesiune.mesajLoginTip !== undefined) { %>
+                            <p class="<%- sesiune.mesajLoginTip == 'ok' ? 'text-success' : 'text-danger' %>"><%- sesiune.mesajLogin %></p>
+                        <% } %>
+                        <button class="btn btn-secondary btn-sm" type="submit">Log in</button>
                     </div>
-                    <button class="btn btn-secondary btn-sm" type="submit">Log in</button>
                 </div>
-            </div>
-        </form>
-    </div>
+            </form>
+        </div>
+    <% } %>
 </div>
 <nav>
     <label id="hamburger" for="ch-menu">
@@ -39,6 +44,11 @@
             }
         %>
         <li><a href="#">Calendar concerte</a></li>
+        <% if (sesiune && sesiune.utilizator === undefined) { %>
+            <li><a href="/inregistrare">Contul meu</a></li>
+        <% } else if (sesiune && sesiune.utilizator) { %>
+            <li><a href="/profil">Logat: <%- sesiune.utilizator.username %></a></li>
+        <% } %>
         <li><a href="/inregistrare">Contul meu</a></li>
         <li><a href="/relatii-clienti">Relatii clienti</a></li>
         <li><a href="/index#sali-concerte">Sali concerte</a></li>
@@ -72,6 +82,14 @@
                 <li><a href="/index#intrebari-frecvente">Intrebari frecvente</a></li>
             </ul>
         </li>
-        <li><a href="/inregistrare">Contul meu</a></li>
+        <% if (sesiune && sesiune.utilizator === undefined) { %>
+            <li><a href="/inregistrare">Contul meu</a></li>
+        <% } else if (sesiune && sesiune.utilizator) { %>
+            <li><a href="/profil">Logat: <%- sesiune.utilizator.username %></a>
+                <ul>
+                    <li><a href="/logout">Delogare</a></li>
+                </ul>    
+            </li>
+        <% } %>
     </ul>
 </nav>
